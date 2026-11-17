@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz: Nghị luận thuyết phục</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Modern&family=Playwrite+VN&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">
+        <span class="mark" aria-hidden="true">“</span>
+        <div>
+          <h1>Lời hay, lẽ phải</h1>
+          <p class="sub">Ngữ văn: nghị luận thuyết phục</p>
+        </div>
+      </div>
+      <ul class="works" aria-label="Ba văn bản trong bài">
+        <li>Chiếu cầu hiền</li>
+        <li>Tôi có một ước mơ</li>
+        <li>Một thời đại trong thi ca</li>
+      </ul>
+    </header>
+
+    <div class="layout">
+      <main class="panel main card">
+        <div id="start">
+          <h2 class="lead">Sẵn sàng thử sức?</h2>
+          <p class="muted">Trả lời 6 câu hỏi về cách lập luận trong ba văn bản nghị luận. Điểm của bạn lên bảng xếp hạng ngay khi nộp bài.</p>
+          <dl class="facts">
+            <div><dt>6</dt><dd>câu hỏi</dd></div>
+            <div><dt>3</dt><dd>văn bản</dd></div>
+            <div><dt>Trực tiếp</dt><dd>bảng điểm</dd></div>
+          </dl>
+          <label class="field" for="playerName">Tên của bạn</label>
+          <input id="playerName" class="name-input" type="text" maxlength="30" placeholder="Ví dụ: Duy Bách" autocomplete="nickname">
+          <button id="startBtn" class="btn">Bắt đầu làm bài</button>
+        </div>
+
+        <div id="quiz" class="hidden">
+          <div class="quiz-top">
+            <div id="progress"></div>
+            <span id="level" class="level"></span>
+          </div>
+          <div class="bar"><div id="barFill"></div></div>
+          <h2 id="question"></h2>
+          <div id="options"></div>
+          <p id="feedback" aria-live="polite"></p>
+          <button id="nextBtn" class="btn" disabled>Câu tiếp theo</button>
+        </div>
+
+        <div id="result" class="hidden">
+          <h2>Kết quả</h2>
+          <p id="score"></p>
+          <p id="message"></p>
+          <button id="restartBtn" class="btn">Làm lại</button>
+        </div>
+      </main>
+
+      <aside class="panel board-panel card">
+        <div class="board-head">
+          <h2 class="board-title">Bảng xếp hạng</h2>
+          <span id="live" class="live off"><i></i><b id="liveText">Đang kết nối</b></span>
+        </div>
+        <p id="status" class="status" aria-live="polite"></p>
+        <table class="board">
+          <thead>
+            <tr><th>Hạng</th><th>Tên</th><th>Điểm</th></tr>
+          </thead>
+          <tbody id="boardBody"></tbody>
+        </table>
+      </aside>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
