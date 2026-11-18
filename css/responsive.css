@@ -1,0 +1,31 @@
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .board-panel {
+    position: static;
+  }
+  .card {
+    padding: 26px 20px;
+  }
+  .masthead h1 {
+    font-size: 1.6rem;
+  }
+  .lead {
+    font-size: 1.6rem;
+  }
+  #question {
+    font-size: 1.25rem;
+  }
+  .aurora i {
+    filter: blur(60px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

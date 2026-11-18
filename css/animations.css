@@ -1,0 +1,83 @@
+@keyframes drift1 {
+  to {
+    transform: translate3d(10vmax, 8vmax, 0) scale(1.12);
+  }
+}
+
+@keyframes drift2 {
+  to {
+    transform: translate3d(-9vmax, 6vmax, 0) scale(1.08);
+  }
+}
+
+@keyframes drift3 {
+  to {
+    transform: translate3d(-8vmax, -7vmax, 0) scale(1.15);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes drawline {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes viewin {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+}
+
+@keyframes leave {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pop {
+  40% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes shake {
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(93, 122, 70, .55);
+  }
+  80%,
+  100% {
+    box-shadow: 0 0 0 8px rgba(93, 122, 70, 0);
+  }
+}
+
+@keyframes fresh {
+  from {
+    background: var(--gold);
+    transform: scale(1.02);
+  }
+}

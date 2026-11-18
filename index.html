@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz: Nghị luận thuyết phục</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Paytone+One&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
   <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -62,7 +63,12 @@
           <h2>Kết quả</h2>
           <div class="ring-wrap" aria-hidden="true">
             <svg class="ring" viewBox="0 0 120 120">
-              <defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EAD7A8"/><stop offset="1" stop-color="#A87F3E"/></linearGradient></defs>
+              <defs>
+                <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#EAD7A8"/>
+                  <stop offset="1" stop-color="#A87F3E"/>
+                </linearGradient>
+              </defs>
               <circle class="ring-bg" cx="60" cy="60" r="52"/>
               <circle id="ringFg" class="ring-fg" cx="60" cy="60" r="52"/>
             </svg>
@@ -87,8 +93,10 @@
           <tbody id="boardBody"></tbody>
         </table>
       </aside>
+
     </div>
   </div>
-  <script src="script.js"></script>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

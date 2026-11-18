@@ -1,0 +1,168 @@
+.quiz-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+#progress {
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+.bar {
+  height: 8px;
+  background: rgba(201, 166, 107, .22);
+  border-radius: 999px;
+  margin-bottom: 26px;
+}
+
+#barFill {
+  position: relative;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold-hi), var(--gold));
+  transition: width .8s var(--ease);
+}
+
+.level {
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 3px 13px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--gold);
+}
+
+.level.trap {
+  background: var(--bad-soft);
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+#question {
+  font-size: 1.45rem;
+  line-height: 1.4;
+  margin: 0 0 22px;
+}
+
+#stage.enter #question {
+  animation: rise .6s var(--ease) both;
+}
+
+#stage.leaving {
+  animation: leave .22s ease forwards;
+}
+
+.option {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 253, 247, .8);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  animation: rise .6s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 80ms);
+  transition: border-color .3s, background .3s, transform .4s var(--ease), box-shadow .4s;
+}
+
+.option .tag {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: .9rem;
+  transition: background .3s, color .3s;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--surface);
+  transform: translateX(5px);
+  box-shadow: 0 12px 24px -16px var(--gold-lo);
+}
+
+.option:hover:not(:disabled) .tag {
+  background: var(--gold-grad);
+  color: var(--ink);
+}
+
+.option:active:not(:disabled) {
+  transform: translateX(5px) scale(.99);
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+.option.correct {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+  animation: pop .55s var(--ease);
+  box-shadow: 0 0 0 4px rgba(93, 122, 70, .14);
+}
+
+.option.correct .tag {
+  background: var(--ok);
+  color: var(--surface);
+}
+
+.option.correct::after {
+  content: "✓";
+  margin-left: auto;
+  color: var(--ok);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.option.wrong {
+  border-color: var(--bad);
+  background: var(--bad-soft);
+  animation: shake .5s;
+}
+
+.option.wrong .tag {
+  background: var(--bad);
+  color: var(--surface);
+}
+
+.option.wrong::after {
+  content: "✕";
+  margin-left: auto;
+  color: var(--bad);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+#feedback {
+  min-height: 28px;
+  margin: 14px 0 0;
+  font-weight: 600;
+}
+
+#feedback.ok {
+  color: var(--ok);
+  animation: rise .45s var(--ease);
+}
+
+#feedback.bad {
+  color: var(--bad);
+  animation: rise .45s var(--ease);
+}

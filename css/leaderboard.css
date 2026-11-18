@@ -1,0 +1,167 @@
+.board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+
+.board-title {
+  margin: 0;
+  font-size: 1.35rem;
+  white-space: nowrap;
+}
+
+.live {
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--ok);
+  background: var(--ok-soft);
+  padding: 4px 11px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: ping 2s infinite;
+}
+
+.live.off {
+  color: var(--muted);
+  background: var(--bg);
+}
+
+.live.off i {
+  background: var(--tan);
+  animation: none;
+}
+
+.status {
+  color: var(--muted);
+  font-size: .84rem;
+  min-height: 1.3em;
+  margin: 8px 0;
+}
+
+.board {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+}
+
+.board th {
+  padding: 4px 10px;
+  font-size: .78rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: left;
+}
+
+.board td {
+  padding: 10px;
+  background: rgba(241, 230, 207, .55);
+  transition: background .3s;
+}
+
+.board tbody tr:hover td {
+  background: rgba(234, 215, 168, .55);
+}
+
+.board td:first-child {
+  border-radius: 14px 0 0 14px;
+}
+
+.board td:last-child {
+  border-radius: 0 14px 14px 0;
+}
+
+.board .rank {
+  width: 52px;
+}
+
+.board .badge {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.board tr.top1 .badge {
+  background: linear-gradient(135deg, #F4E2B0, #C9A66B 60%, #A87F3E);
+  color: var(--ink);
+  box-shadow: 0 4px 12px -3px rgba(168, 127, 62, .7);
+}
+
+.board tr.top2 .badge {
+  background: linear-gradient(135deg, #F1EDE6, #BDB5A9);
+  color: var(--ink);
+}
+
+.board tr.top3 .badge {
+  background: linear-gradient(135deg, #E9C29E, #B07848);
+  color: var(--ink);
+}
+
+.board .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.board .pt {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.board th:last-child {
+  text-align: right;
+}
+
+.board .empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 10px;
+  border-radius: 14px;
+}
+
+.board tr.top1 .nm,
+.board tr.top1 .pt {
+  font-weight: 700;
+}
+
+.board tr.me td {
+  background: rgba(234, 215, 168, .75);
+  box-shadow: inset 0 1.5px 0 var(--gold-lo), inset 0 -1.5px 0 var(--gold-lo);
+}
+
+.board tr.me td:first-child {
+  box-shadow: inset 1.5px 1.5px 0 var(--gold-lo), inset 0 -1.5px 0 var(--gold-lo);
+}
+
+.board tr.me td:last-child {
+  box-shadow: inset -1.5px 1.5px 0 var(--gold-lo), inset 0 -1.5px 0 var(--gold-lo);
+}
+
+.board tr.enter td {
+  animation: rise .6s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 500ms);
+}
+
+.board tr.fresh td {
+  animation: fresh 1.8s ease-out;
+}
