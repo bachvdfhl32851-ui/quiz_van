@@ -1,6 +1,3 @@
-# Máy chủ: phục vụ trang quiz và lưu bảng điểm chung vào scores.json
-# Chạy trên máy cá nhân: python server.py
-# Chạy trên Replit hoặc Railway: tự đọc PORT và DATA_FILE từ biến môi trường
 import json
 import os
 import socket
@@ -12,7 +9,7 @@ PORT = int(os.environ.get("PORT", 8000))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.environ.get("DATA_FILE", os.path.join(BASE_DIR, "scores.json"))
 lock = threading.Lock()
-cond = threading.Condition()  # đánh thức các kết nối xem trực tiếp khi có thay đổi
+cond = threading.Condition()
 live = {"version": 0, "viewers": 0}
 
 
@@ -76,7 +73,7 @@ class Handler(SimpleHTTPRequestHandler):
                     payload = json.dumps(snapshot(), ensure_ascii=False)
                     self.wfile.write(f"data: {payload}\n\n".encode("utf-8"))
                 else:
-                    self.wfile.write(b": ping\n\n")  # giữ kết nối khỏi bị ngắt
+                    self.wfile.write(b": ping\n\n")
                 self.wfile.flush()
         except OSError:
             pass

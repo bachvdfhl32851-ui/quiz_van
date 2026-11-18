@@ -1,4 +1,4 @@
-const API = ""; // để trống: dùng cùng máy chủ với trang
+const API = "";
 
 const questions = [
   {
@@ -59,8 +59,8 @@ let score = 0;
 let answered = false;
 let playerName = "";
 let submitted = false;
-let myTime = null;      // mốc thời gian của lượt chơi này, để tô sáng dòng của bạn
-let prevKeys = null;    // các dòng đã có, để làm nổi dòng mới
+let myTime = null;
+let prevKeys = null;
 let liveOk = false;
 
 const $ = id => document.getElementById(id);
@@ -153,7 +153,6 @@ function renderBoard(rows, viewers) {
     if (r.time === myTime) tr.classList.add("me");
     if (prevKeys && !prevKeys.has(r.time)) tr.classList.add("fresh");
     tr.innerHTML = `<td class="rank"><span class="badge">${i + 1}</span></td><td class="nm"></td><td class="pt">${r.score} / ${r.total}</td>`;
-    // dùng textContent để tránh chèn HTML từ tên người chơi
     tr.querySelector(".nm").textContent = r.name;
     body.appendChild(tr);
   });
@@ -186,7 +185,7 @@ function connectLive() {
     const d = JSON.parse(e.data);
     renderBoard(d.rows, d.viewers);
   };
-  es.onerror = () => setLive(false); // trình duyệt tự nối lại
+  es.onerror = () => setLive(false);
 }
 
 function showResult() {
@@ -235,4 +234,4 @@ $("restartBtn").addEventListener("click", () => {
 
 loadLeaderboard();
 connectLive();
-setInterval(() => { if (!liveOk) loadLeaderboard(); }, 10000); // dự phòng nếu mất kết nối trực tiếp
+setInterval(() => { if (!liveOk) loadLeaderboard(); }, 10000);
