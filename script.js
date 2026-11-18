@@ -68,6 +68,57 @@ const startEl = $("start");
 const quizEl = $("quiz");
 const resultEl = $("result");
 const LETTERS = ["A", "B", "C", "D"];
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastSig = null;
+let leaving = false;
+
+function morph(change) {
+  const el = document.querySelector(".main");
+  if (reduceMotion) { change(); return; }
+  const h0 = el.offsetHeight;
+  el.style.height = "";
+  change();
+  const h1 = el.offsetHeight;
+  if (Math.abs(h1 - h0) < 2) return;
+  el.classList.add("morphing");
+  el.style.height = h0 + "px";
+  void el.offsetHeight;
+  el.style.transition = "height .7s cubic-bezier(.22, 1, .36, 1)";
+  el.style.height = h1 + "px";
+  const done = e => {
+    if (e.propertyName !== "height") return;
+    el.removeEventListener("transitionend", done);
+    el.style.height = el.style.transition = "";
+    el.classList.remove("morphing");
+  };
+  el.addEventListener("transitionend", done);
+}
+
+function reveal(el) {
+  el.classList.remove("hidden", "view-in");
+  void el.offsetWidth;
+  el.classList.add("view-in");
+}
+
+function animateRing() {
+  const C = 2 * Math.PI * 52;
+  const fg = $("ringFg"), num = $("ringNum");
+  $("ringTotal").textContent = `/ ${questions.length}`;
+  fg.style.transition = "none";
+  fg.style.strokeDashoffset = C;
+  void fg.getBoundingClientRect();
+  fg.style.transition = "";
+  fg.style.strokeDashoffset = C * (1 - score / questions.length);
+  if (reduceMotion || score === 0) { num.textContent = score; return; }
+  num.textContent = 0;
+  const t0 = performance.now(), dur = 1100;
+  const tick = now => {
+    const p = Math.min((now - t0) / dur, 1);
+    num.textContent = Math.round(score * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
 
 function showQuestion() {
   answered = false;
@@ -79,6 +130,7 @@ function showQuestion() {
   $("level").className = q.level === "Bẫy" ? "level trap" : "level";
   $("question").textContent = q.question;
   $("feedback").textContent = "";
+  $("feedback").className = "";
   $("nextBtn").disabled = true;
   $("nextBtn").textContent = current === questions.length - 1 ? "Xem kết quả" : "Câu tiếp theo";
 
@@ -87,6 +139,7 @@ function showQuestion() {
   q.options.forEach((text, index) => {
     const btn = document.createElement("button");
     btn.className = "option";
+    btn.style.setProperty("--i", index);
     const tag = document.createElement("span");
     tag.className = "tag";
     tag.textContent = LETTERS[index];
@@ -96,6 +149,10 @@ function showQuestion() {
     btn.addEventListener("click", () => selectAnswer(index));
     optionsEl.appendChild(btn);
   });
+  const st = $("stage");
+  st.classList.remove("leaving", "enter");
+  void st.offsetWidth;
+  st.classList.add("enter");
 }
 
 function selectAnswer(index) {
@@ -142,6 +199,10 @@ async function submitScore() {
 
 function renderBoard(rows, viewers) {
   const body = $("boardBody");
+  const sig = JSON.stringify(rows) + myTime;
+  if (sig === lastSig) { setViewers(viewers); return; }
+  lastSig = sig;
+  const first = prevKeys === null;
   body.innerHTML = "";
   if (rows.length === 0) {
     body.innerHTML = `<tr><td colspan="3" class="empty">Chưa có ai chơi. Hãy là người đầu tiên.</td></tr>`;
@@ -149,6 +210,8 @@ function renderBoard(rows, viewers) {
   const keys = new Set(rows.map(r => r.time));
   rows.forEach((r, i) => {
     const tr = document.createElement("tr");
+    tr.style.setProperty("--i", i);
+    if (first) tr.classList.add("enter");
     if (i < 3) tr.classList.add(`top${i + 1}`);
     if (r.time === myTime) tr.classList.add("me");
     if (prevKeys && !prevKeys.has(r.time)) tr.classList.add("fresh");
@@ -157,6 +220,10 @@ function renderBoard(rows, viewers) {
     body.appendChild(tr);
   });
   prevKeys = keys;
+  setViewers(viewers);
+}
+
+function setViewers(viewers) {
   if (typeof viewers === "number") {
     $("liveText").textContent = `Trực tiếp · ${viewers} người đang xem`;
   }
@@ -189,9 +256,14 @@ function connectLive() {
 }
 
 function showResult() {
+  morph(renderResult);
+}
+
+function renderResult() {
   quizEl.classList.add("hidden");
-  resultEl.classList.remove("hidden");
-  $("score").textContent = `${playerName} đạt ${score} / ${questions.length} điểm`;
+  reveal(resultEl);
+  animateRing();
+  $("score").textContent = `Bạn đạt ${score} / ${questions.length} điểm`;
 
   if (score === questions.length) {
     $("message").textContent = "Xuất sắc! Bạn nắm rất vững công thức.";
@@ -209,25 +281,35 @@ function startQuiz() {
   score = 0;
   submitted = false;
   myTime = null;
-  startEl.classList.add("hidden");
-  resultEl.classList.add("hidden");
-  quizEl.classList.remove("hidden");
-  showQuestion();
+  morph(() => {
+    startEl.classList.add("hidden");
+    resultEl.classList.add("hidden");
+    reveal(quizEl);
+    showQuestion();
+  });
 }
 
 $("startBtn").addEventListener("click", startQuiz);
 $("playerName").addEventListener("keydown", e => { if (e.key === "Enter") startQuiz(); });
 $("nextBtn").addEventListener("click", () => {
-  if (current < questions.length - 1) {
-    current++;
-    showQuestion();
-  } else {
-    showResult();
-  }
+  if (leaving) return;
+  leaving = true;
+  $("stage").classList.add("leaving");
+  setTimeout(() => {
+    leaving = false;
+    if (current < questions.length - 1) {
+      current++;
+      morph(showQuestion);
+    } else {
+      showResult();
+    }
+  }, reduceMotion ? 0 : 220);
 });
 $("restartBtn").addEventListener("click", () => {
-  resultEl.classList.add("hidden");
-  startEl.classList.remove("hidden");
+  morph(() => {
+    resultEl.classList.add("hidden");
+    reveal(startEl);
+  });
   $("playerName").value = "";
   $("status").textContent = "";
 });
@@ -235,3 +317,24 @@ $("restartBtn").addEventListener("click", () => {
 loadLeaderboard();
 connectLive();
 setInterval(() => { if (!liveOk) loadLeaderboard(); }, 10000);
+
+document.querySelectorAll(".card").forEach(card => {
+  let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+  const pos = e => {
+    const r = card.getBoundingClientRect();
+    tx = e.clientX - r.left;
+    ty = e.clientY - r.top;
+  };
+  const loop = () => {
+    x += (tx - x) * .14;
+    y += (ty - y) * .14;
+    card.style.setProperty("--mx", `${x}px`);
+    card.style.setProperty("--my", `${y}px`);
+    raf = Math.abs(tx - x) > .5 || Math.abs(ty - y) > .5 ? requestAnimationFrame(loop) : 0;
+  };
+  card.addEventListener("pointerenter", e => { pos(e); x = tx; y = ty; });
+  card.addEventListener("pointermove", e => {
+    pos(e);
+    if (!raf) raf = requestAnimationFrame(loop);
+  });
+});
