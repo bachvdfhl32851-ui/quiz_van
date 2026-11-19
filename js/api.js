@@ -19,6 +19,8 @@ export const startGame = name => post("/api/start", { name });
 export const sendAnswer = ({ session, index, allIn }) =>
   post("/api/answer", { session, index, all_in: allIn });
 
+export const fetchSessionState = session => post("/api/state", { session });
+
 export async function fetchLeaderboard() {
   const res = await fetch(`${API}/api/leaderboard`);
   return res.json();

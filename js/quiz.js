@@ -6,6 +6,7 @@ import { startGame, sendAnswer } from "./api.js";
 import { isLive, loadLeaderboard } from "./leaderboard.js";
 import { isLastQuestion, isTrap, resultMessage } from "./quiz-logic.js";
 import * as view from "./quiz-view.js";
+import * as guard from "./guard.js";
 
 let questions = [];
 let total = 0;
@@ -74,6 +75,14 @@ export async function submitAnswer() {
   state.points = r.total_points;
   state.earned[state.current] = r.total_points - r.points_before;
   if (r.done) state.myTime = r.time;
+  guard.update({
+    answered: state.current + 1,
+    points: r.total_points,
+    streak: r.streak,
+    best: r.best_streak,
+    correct: r.correct_count,
+    done: r.done
+  });
 
   view.showAnswer({
     chosen,
@@ -93,6 +102,7 @@ export async function submitAnswer() {
 }
 
 function showResult() {
+  guard.markResultShown();
   morph(() => view.showResultScreen({
     points: state.points,
     max: maxPoints,
@@ -133,6 +143,7 @@ export async function startQuiz() {
   total = game.total;
   maxPoints = game.max;
   state.session = game.session;
+  guard.begin(game.session, game.total, game.max);
   state.playerName = $("playerName").value.trim() || ANONYMOUS_NAME;
   state.current = 0;
   state.score = 0;

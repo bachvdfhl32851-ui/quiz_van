@@ -141,3 +141,23 @@ def answer(session_id, index, all_in):
             result["time"] = entry["time"]
             result["_saved"] = True
         return result
+
+
+def state(session_id):
+    """Trạng thái điểm thật của một phiên (không chứa đáp án)."""
+    if not isinstance(session_id, str):
+        raise GameError("Dữ liệu không hợp lệ")
+    with _lock:
+        s = _sessions.get(session_id)
+        if s is None or time.time() - s["created"] > SESSION_TTL:
+            raise GameError("Phiên chơi không tồn tại hoặc đã hết hạn", 404)
+        return {
+            "answered": s["current"],
+            "points": s["points"],
+            "streak": s["streak"],
+            "best": s["best"],
+            "correct": s["correct"],
+            "total": len(s["questions"]),
+            "max": max_score(len(s["questions"])),
+            "done": s["done"],
+        }

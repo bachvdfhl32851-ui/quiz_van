@@ -96,13 +96,15 @@ class Handler(SimpleHTTPRequestHandler):
         return data
 
     def do_POST(self):
-        if self.path not in ("/api/start", "/api/answer"):
+        if self.path not in ("/api/start", "/api/answer", "/api/state"):
             self.send_json({"error": "Không tìm thấy"}, 404)
             return
         try:
             data = self.read_json()
             if self.path == "/api/start":
                 result = game.start(data.get("name", ""))
+            elif self.path == "/api/state":
+                result = game.state(data.get("session"))
             else:
                 result = game.answer(data.get("session"), data.get("index"), data.get("all_in", False))
         except game.GameError as e:
