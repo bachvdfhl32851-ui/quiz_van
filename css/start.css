@@ -66,3 +66,14 @@
   background: var(--surface);
   box-shadow: 0 0 0 5px rgba(201, 166, 107, .22);
 }
+
+.start-error {
+  margin: 14px 0 0;
+  color: var(--bad, #c0392b);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.start-error:empty {
+  display: none;
+}

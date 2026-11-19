@@ -34,21 +34,22 @@
       <main class="panel main card">
         <div id="start">
           <h2 class="lead">Sẵn sàng thử sức?</h2>
-          <p class="muted">Trả lời 6 câu hỏi về cách lập luận trong ba văn bản nghị luận. Điểm của bạn lên bảng xếp hạng ngay khi nộp bài.</p>
+          <p class="muted">Trả lời 12 câu hỏi về cách lập luận trong ba văn bản nghị luận. Điểm của bạn lên bảng xếp hạng ngay khi nộp bài.</p>
           <dl class="facts">
-            <div><dt>6</dt><dd>câu hỏi</dd></div>
+            <div><dt>12</dt><dd>câu hỏi</dd></div>
             <div><dt>3</dt><dd>văn bản</dd></div>
             <div><dt>Trực tiếp</dt><dd>bảng điểm</dd></div>
           </dl>
           <label class="field" for="playerName">Tên của bạn</label>
           <input id="playerName" class="name-input" type="text" maxlength="30" placeholder="Ví dụ: Duy Bách" autocomplete="nickname">
           <button id="startBtn" class="btn">Bắt đầu làm bài</button>
+          <p id="startError" class="start-error" role="alert"></p>
         </div>
 
         <div id="quiz" class="hidden">
           <div class="quiz-top">
             <div id="progress"></div>
-            <span id="level" class="level"></span>
+            <span id="scoreBox" class="level">0 điểm</span>
           </div>
           <div class="bar"><div id="barFill"></div></div>
           <div id="stage">
@@ -56,7 +57,9 @@
             <div id="options"></div>
             <p id="feedback" aria-live="polite"></p>
           </div>
-          <button id="nextBtn" class="btn" disabled>Câu tiếp theo</button>
+          <button id="submitBtn" class="btn">Nộp đáp án</button>
+          <button id="allInBtn" class="btn btn-allin" aria-pressed="false" title="Bật All in, rồi nộp đáp án. Đúng: nhân đôi điểm hiện có. Sai: mất hết điểm. Chỉ dùng được 1 lần.">All in</button>
+          <button id="nextBtn" class="btn hidden">Câu tiếp theo</button>
         </div>
 
         <div id="result" class="hidden">
@@ -75,8 +78,24 @@
             <div class="ring-num"><b id="ringNum">0</b><span id="ringTotal"></span></div>
           </div>
           <p id="score"></p>
+          <p id="detail" class="muted"></p>
           <p id="message"></p>
-          <button id="restartBtn" class="btn">Làm lại</button>
+          <div class="actions">
+            <button id="reviewBtn" class="btn">Xem lại câu trả lời</button>
+            <button id="restartBtn" class="btn btn-ghost">Làm lại</button>
+          </div>
+        </div>
+
+        <div id="review" class="hidden">
+          <div class="rv-top">
+            <h2>Bài làm của bạn</h2>
+            <span id="reviewSummary" class="level"></span>
+          </div>
+          <div id="reviewList"></div>
+          <div class="actions">
+            <button id="backBtn" class="btn">Quay lại kết quả</button>
+            <button id="reviewRestartBtn" class="btn btn-ghost">Làm lại</button>
+          </div>
         </div>
       </main>
 

@@ -1,14 +1,23 @@
 const API = "";
 
-export async function postScore(payload) {
-  const res = await fetch(`${API}/api/score`, {
+async function post(path, payload) {
+  const res = await fetch(`${API}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-  if (!res.ok) throw new Error("Lỗi máy chủ");
+  if (!res.ok) {
+    const err = new Error("Lỗi máy chủ");
+    err.status = res.status;
+    throw err;
+  }
   return res.json();
 }
+
+export const startGame = name => post("/api/start", { name });
+
+export const sendAnswer = ({ session, index, allIn }) =>
+  post("/api/answer", { session, index, all_in: allIn });
 
 export async function fetchLeaderboard() {
   const res = await fetch(`${API}/api/leaderboard`);

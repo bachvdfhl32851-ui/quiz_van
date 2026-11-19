@@ -20,7 +20,7 @@
   --serif: "Paytone One", system-ui, sans-serif;
   --sans: "Paytone One", system-ui, sans-serif;
   --ease: cubic-bezier(.22, 1, .36, 1);
-  --gold-grad: linear-gradient(135deg, var(--gold-hi), var(--gold) 55%, var(--gold-lo));
+  --gold-grad: var(--gold);
 }
 
 * {

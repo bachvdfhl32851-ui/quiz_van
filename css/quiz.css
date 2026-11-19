@@ -166,3 +166,14 @@
   color: var(--bad);
   animation: rise .45s var(--ease);
 }
+
+.option.selected {
+  border-color: var(--gold);
+  background: var(--surface);
+  box-shadow: 0 0 0 4px rgba(201, 166, 107, .22);
+}
+
+.option.selected .tag {
+  background: var(--gold-grad);
+  color: var(--ink);
+}

@@ -22,7 +22,7 @@ function createRow(row, i, isFirstRender) {
   if (i < 3) tr.classList.add(`top${i + 1}`);
   if (row.time === state.myTime) tr.classList.add("me");
   if (prevKeys && !prevKeys.has(row.time)) tr.classList.add("fresh");
-  tr.innerHTML = `<td class="rank"><span class="badge">${i + 1}</span></td><td class="nm"></td><td class="pt">${row.score} / ${row.total}</td>`;
+  tr.innerHTML = `<td class="rank"><span class="badge">${i + 1}</span></td><td class="nm"></td><td class="pt">${row.score}</td>`;
   tr.querySelector(".nm").textContent = row.name;
   return tr;
 }

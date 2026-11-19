@@ -3,7 +3,7 @@ import posixpath
 from http.server import SimpleHTTPRequestHandler
 from urllib.parse import unquote
 
-from . import live, store
+from . import game, live
 from .config import PUBLIC_PATHS, ROOT_DIR
 
 
@@ -27,6 +27,12 @@ class Handler(SimpleHTTPRequestHandler):
 
     def log_message(self, format, *args):
         pass
+
+    def end_headers(self):
+        # Luôn kiểm tra lại với server để trình duyệt không dùng JS cũ sau khi cập nhật.
+        if not self.path.startswith("/api/"):
+            self.send_header("Cache-Control", "no-cache")
+        super().end_headers()
 
     def is_public(self):
         path = unquote(self.path.split("?", 1)[0].split("#", 1)[0])
@@ -80,16 +86,31 @@ class Handler(SimpleHTTPRequestHandler):
         finally:
             live.viewer_left()
 
+    def read_json(self):
+        length = int(self.headers.get("Content-Length", 0))
+        if not 0 < length <= 2048:
+            raise ValueError("Kích thước không hợp lệ")
+        data = json.loads(self.rfile.read(length).decode("utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("Dữ liệu không hợp lệ")
+        return data
+
     def do_POST(self):
-        if self.path != "/api/score":
+        if self.path not in ("/api/start", "/api/answer"):
             self.send_json({"error": "Không tìm thấy"}, 404)
             return
         try:
-            length = int(self.headers.get("Content-Length", 0))
-            data = json.loads(self.rfile.read(length).decode("utf-8"))
-            entry = store.add_score(data.get("name", ""), data["score"], data["total"])
-        except (ValueError, KeyError, TypeError, AttributeError, json.JSONDecodeError):
+            data = self.read_json()
+            if self.path == "/api/start":
+                result = game.start(data.get("name", ""))
+            else:
+                result = game.answer(data.get("session"), data.get("index"), data.get("all_in", False))
+        except game.GameError as e:
+            self.send_json({"error": str(e)}, e.status)
+            return
+        except (ValueError, TypeError):
             self.send_json({"error": "Dữ liệu không hợp lệ"}, 400)
             return
-        live.bump()
-        self.send_json({"ok": True, "time": entry["time"]})
+        if result.pop("_saved", False):
+            live.bump()
+        self.send_json(result)

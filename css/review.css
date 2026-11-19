@@ -1,0 +1,153 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--gold);
+  box-shadow: none;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface);
+  box-shadow: 0 12px 24px -16px var(--gold-lo);
+}
+
+.rv-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+#review h2 {
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.rv-card {
+  padding: 18px 18px 8px;
+  margin-bottom: 16px;
+  border: 1.5px solid var(--line);
+  border-left-width: 6px;
+  border-radius: 18px;
+  background: rgba(255, 253, 247, .8);
+  animation: rise .6s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+.rv-card.ok {
+  border-left-color: var(--ok);
+}
+
+.rv-card.bad {
+  border-left-color: var(--bad);
+}
+
+.rv-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: .85rem;
+}
+
+.rv-num {
+  color: var(--muted);
+}
+
+.rv-card.ok .rv-verdict {
+  color: var(--ok);
+}
+
+.rv-card.bad .rv-verdict {
+  color: var(--bad);
+}
+
+.rv-question {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.4;
+  margin: 8px 0 14px;
+}
+
+.rv-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.rv-option .tag {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.rv-text {
+  flex: 1;
+}
+
+.rv-note {
+  flex: none;
+  font-size: .75rem;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.rv-option.correct {
+  border-color: var(--ok);
+  background: var(--ok-soft);
+}
+
+.rv-option.correct .tag {
+  background: var(--ok);
+  color: var(--surface);
+}
+
+.rv-option.wrong {
+  border-color: var(--bad);
+  background: var(--bad-soft);
+}
+
+.rv-option.wrong .tag {
+  background: var(--bad);
+  color: var(--surface);
+}
+
+@media (max-width: 520px) {
+  .rv-option {
+    flex-wrap: wrap;
+  }
+  .rv-note {
+    margin-left: 42px;
+  }
+}
+
+.rv-trap {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--bad-soft);
+  color: var(--bad);
+  font-size: .9rem;
+  line-height: 1.45;
+}

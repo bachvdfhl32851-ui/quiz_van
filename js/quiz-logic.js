@@ -1,6 +1,7 @@
 import { TEXT } from "./config.js";
 
-export const isCorrect = (question, index) => index === question.answer;
+// Chỉ còn các hàm hiển thị. Chấm điểm và đáp án đúng nằm hoàn toàn trên server.
+export const isCorrect = (question, index) => (index ?? null) === question.answer;
 
 export const isLastQuestion = (current, total) => current === total - 1;
 
