@@ -7,6 +7,7 @@ import { isLive, loadLeaderboard } from "./leaderboard.js";
 import { isLastQuestion, isTrap, resultMessage } from "./quiz-logic.js";
 import * as view from "./quiz-view.js";
 import * as guard from "./guard.js";
+import * as timer from "./timer.js";
 
 let questions = [];
 let total = 0;
@@ -74,14 +75,21 @@ export async function submitAnswer() {
   state.bestStreak = r.best_streak;
   state.points = r.total_points;
   state.earned[state.current] = r.total_points - r.points_before;
-  if (r.done) state.myTime = r.time;
+  if (r.done) {
+    state.myTime = r.time;
+    state.duration = r.duration;
+    timer.stop(r.duration);
+  } else {
+    timer.sync(r.elapsed);
+  }
   guard.update({
     answered: state.current + 1,
     points: r.total_points,
     streak: r.streak,
     best: r.best_streak,
     correct: r.correct_count,
-    done: r.done
+    done: r.done,
+    duration: r.done ? r.duration : null
   });
 
   view.showAnswer({
@@ -109,7 +117,8 @@ function showResult() {
     message: resultMessage(state.points, maxPoints),
     correct: state.score,
     total,
-    best: state.bestStreak
+    best: state.bestStreak,
+    duration: state.duration
   }));
   // Điểm đã được server tự lưu khi nộp câu cuối.
   view.setStatus(TEXT.submit.saved);
@@ -144,6 +153,8 @@ export async function startQuiz() {
   maxPoints = game.max;
   state.session = game.session;
   guard.begin(game.session, game.total, game.max);
+  timer.start(0);
+  state.duration = null;
   state.playerName = $("playerName").value.trim() || ANONYMOUS_NAME;
   state.current = 0;
   state.score = 0;

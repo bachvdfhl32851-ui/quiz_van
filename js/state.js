@@ -14,5 +14,6 @@ export const state = {
   playerName: "",
   submitted: false,
   session: null,
-  myTime: null
+  myTime: null,
+  duration: null
 };

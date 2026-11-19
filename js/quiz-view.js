@@ -1,7 +1,7 @@
 import { $, startEl, quizEl, resultEl, reviewEl } from "./dom.js";
 import { LETTERS, TEXT } from "./config.js";
 import { reveal, animateRing } from "./animations.js";
-import { isTrap, isCorrect } from "./quiz-logic.js";
+import { isTrap, isCorrect, formatDuration } from "./quiz-logic.js";
 
 export function showStartScreen() {
   resultEl.classList.add("hidden");
@@ -16,13 +16,14 @@ export function showQuizScreen() {
   reveal(quizEl);
 }
 
-export function showResultScreen({ points, max, message, correct, total, best }) {
+export function showResultScreen({ points, max, message, correct, total, best, duration }) {
   quizEl.classList.add("hidden");
   reviewEl.classList.add("hidden");
   reveal(resultEl);
   animateRing(points, max);
   $("score").textContent = TEXT.result.score(points, max);
   $("detail").textContent = TEXT.result.detail(correct, total, best);
+  $("timeInfo").textContent = TEXT.result.time(formatDuration(duration));
   $("message").textContent = message;
 }
 

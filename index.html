@@ -34,7 +34,7 @@
       <main class="panel main card">
         <div id="start">
           <h2 class="lead">Sẵn sàng thử sức?</h2>
-          <p class="muted">Trả lời 12 câu hỏi về cách lập luận trong ba văn bản nghị luận. Điểm của bạn lên bảng xếp hạng ngay khi nộp bài.</p>
+          <p class="muted">Trả lời 12 câu hỏi về cách lập luận trong ba văn bản nghị luận. Điểm của bạn lên bảng xếp hạng ngay khi nộp bài. Cùng số điểm thì ai làm nhanh hơn xếp trên.</p>
           <dl class="facts">
             <div><dt>12</dt><dd>câu hỏi</dd></div>
             <div><dt>3</dt><dd>văn bản</dd></div>
@@ -49,7 +49,7 @@
         <div id="quiz" class="hidden">
           <div class="quiz-top">
             <div id="progress"></div>
-            <span id="scoreBox" class="level">0 điểm</span>
+            <span class="quiz-stats"><span id="timerBox" class="level">⏱ 0:00.0</span><span id="scoreBox" class="level">0 điểm</span></span>
           </div>
           <div class="bar"><div id="barFill"></div></div>
           <div id="stage">
@@ -79,6 +79,7 @@
           </div>
           <p id="score"></p>
           <p id="detail" class="muted"></p>
+          <p id="timeInfo" class="muted"></p>
           <p id="message"></p>
           <div class="actions">
             <button id="reviewBtn" class="btn">Xem lại câu trả lời</button>
@@ -107,7 +108,7 @@
         <p id="status" class="status" aria-live="polite"></p>
         <table class="board">
           <thead>
-            <tr><th>Hạng</th><th>Tên</th><th>Điểm</th></tr>
+            <tr><th>Hạng</th><th>Tên</th><th>Điểm</th><th>Thời gian</th></tr>
           </thead>
           <tbody id="boardBody"></tbody>
         </table>

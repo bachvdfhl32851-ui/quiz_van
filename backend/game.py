@@ -69,6 +69,7 @@ def start(name):
     session = {
         "name": name, "questions": items, "current": 0, "points": 0, "streak": 0,
         "best": 0, "correct": 0, "allin_used": False, "done": False, "created": now,
+        "t0": time.monotonic(), "duration": None,
     }
     sid = secrets.token_urlsafe(24)
     with _lock:
@@ -134,10 +135,14 @@ def answer(session_id, index, all_in):
             "correct_count": s["correct"],
             "all_in": all_in,
             "done": s["current"] >= len(s["questions"]),
+            "elapsed": round(time.monotonic() - s["t0"], 2),
+            "duration": None,
         }
         if result["done"]:
             s["done"] = True
-            entry = store.add_score(s["name"], s["points"], max_score(len(s["questions"])))
+            s["duration"] = result["elapsed"]
+            result["duration"] = s["duration"]
+            entry = store.add_score(s["name"], s["points"], max_score(len(s["questions"])), s["duration"])
             result["time"] = entry["time"]
             result["_saved"] = True
         return result
@@ -160,4 +165,6 @@ def state(session_id):
             "total": len(s["questions"]),
             "max": max_score(len(s["questions"])),
             "done": s["done"],
+            "duration": s["duration"],
+            "elapsed": s["duration"] if s["done"] else round(time.monotonic() - s["t0"], 2),
         }

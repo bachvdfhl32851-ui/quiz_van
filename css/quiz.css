@@ -177,3 +177,13 @@
   background: var(--gold-grad);
   color: var(--ink);
 }
+
+.quiz-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#timerBox {
+  font-variant-numeric: tabular-nums;
+}

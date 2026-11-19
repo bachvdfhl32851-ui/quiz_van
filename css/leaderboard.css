@@ -116,7 +116,7 @@
 .board .nm {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 130px;
   white-space: nowrap;
   font-weight: 500;
 }
@@ -128,8 +128,17 @@
   font-variant-numeric: tabular-nums;
 }
 
-.board th:last-child {
+.board th:nth-child(3),
+.board th:nth-child(4) {
   text-align: right;
+}
+
+.board .tm {
+  text-align: right;
+  white-space: nowrap;
+  font-size: .88rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .board .empty {

@@ -1,15 +1,19 @@
 import { $ } from "./dom.js";
 import { RING_RADIUS, TEXT, TIMING } from "./config.js";
 import { fetchSessionState } from "./api.js";
-import { resultMessage } from "./quiz-logic.js";
+import { resultMessage, formatDuration } from "./quiz-logic.js";
+import * as timer from "./timer.js";
 
+// Điểm thật luôn lấy từ server. Mỗi giây hỏi lại, và ngay khi có ai sửa chữ điểm
+// trên trang thì vẽ lại bằng số của server. Đây là lớp làm khó: người chơi vẫn có thể
+// tắt đoạn code này trên máy họ, nhưng điểm được lưu thì chỉ server quyết định.
 const POLL_MS = 1000;
 
 let session = null;
 let truth = null;
 let total = 0;
 let max = 0;
-let timer = null;
+let pollTimer = null;
 let observer = null;
 let resultShownAt = 0;
 
@@ -46,6 +50,11 @@ function paint() {
     }
   }
 
+  if (truth.done && typeof truth.duration === "number") {
+    setText("timerBox", TEXT.question.timer(formatDuration(truth.duration)));
+    if (!hidden("result")) setText("timeInfo", TEXT.result.time(formatDuration(truth.duration)));
+  }
+
   if (truth.done && !hidden("review")) {
     setText("reviewSummary", TEXT.review.summary(truth.correct, total, truth.points));
   }
@@ -59,6 +68,7 @@ async function poll() {
     const s = await fetchSessionState(session);
     if (truth && s.answered < truth.answered) return; // phản hồi cũ
     truth = s;
+    if (!s.done) timer.sync(s.elapsed);
     total = s.total;
     max = s.max;
     paint();
@@ -71,15 +81,16 @@ export function begin(sessionId, totalQuestions, maxPoints) {
   session = sessionId;
   total = totalQuestions;
   max = maxPoints;
-  truth = { answered: 0, points: 0, streak: 0, best: 0, correct: 0, done: false };
+  truth = { answered: 0, points: 0, streak: 0, best: 0, correct: 0, done: false, duration: null };
   resultShownAt = 0;
-  clearInterval(timer);
-  timer = setInterval(poll, POLL_MS);
+  clearInterval(pollTimer);
+  pollTimer = setInterval(poll, POLL_MS);
 
   if (!observer) {
     observer = new MutationObserver(paint);
     const opts = { subtree: true, childList: true, characterData: true };
     observer.observe($("scoreBox"), opts);
+    observer.observe($("timerBox"), opts);
     observer.observe($("result"), { ...opts, attributes: true, attributeFilter: ["style"] });
     observer.observe($("reviewSummary"), opts);
   }

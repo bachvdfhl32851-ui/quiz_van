@@ -16,6 +16,7 @@ export const RING_RADIUS = 52;
 export const TEXT = {
   question: {
     progress: (n, total) => `Câu ${n} / ${total}`,
+    timer: t => `⏱ ${t}`,
     next: "Câu tiếp theo",
     submit: "Nộp đáp án",
     finish: "Xem kết quả",
@@ -36,6 +37,7 @@ export const TEXT = {
   },
   result: {
     score: (score, total) => `Bạn đạt ${score} / ${total} điểm`,
+    time: t => `Thời gian làm bài: ${t}`,
     detail: (correct, total, best) => `Đúng ${correct} / ${total} câu · Chuỗi đúng dài nhất: ${best}`,
     perfect: "Xuất sắc! Bạn nắm rất vững công thức.",
     good: "Khá tốt! Hãy xem lại các câu sai.",
